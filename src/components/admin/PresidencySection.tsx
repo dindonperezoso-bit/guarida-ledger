@@ -52,7 +52,7 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
 
   if (!config) {
     return (
-      <div className="bg-white rounded-xl p-8 border border-gray-200">
+      <div className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40">
         <p className="font-paragraph text-foreground/60">Cargando configuración...</p>
       </div>
     );
@@ -63,28 +63,28 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl p-8 border border-gray-200"
+        className="bg-halloween-purple/20 rounded-2xl p-8 border border-halloween-purple/40"
       >
         <div className="flex items-center gap-4 mb-6">
-          <Crown className="w-8 h-8 text-accent-gold" />
+          <Crown className="w-8 h-8 text-halloween-orange-light" />
           <div>
-            <h2 className="font-heading text-2xl text-foreground">Presidencia Reclamada</h2>
+            <h2 className="font-heading text-2xl text-halloween-orange-light">Presidencia Reclamada</h2>
             <p className="font-paragraph text-foreground/60">
               La presidencia ya ha sido establecida
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-accent-gold/10 rounded-xl p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-halloween-orange/10 rounded-xl p-6 border border-halloween-orange/30">
           <div>
-            <p className="font-paragraph text-sm text-foreground/60 mb-1">Presidente Actual</p>
-            <p className="font-paragraph text-xl font-bold text-foreground">
+            <p className="font-paragraph text-sm text-halloween-purple-bright font-bold uppercase tracking-wider mb-1">Presidente Actual</p>
+            <p className="font-heading text-xl text-halloween-orange-light">
               {config.currentPresidentMemberId || 'No especificado'}
             </p>
           </div>
           <div>
-            <p className="font-paragraph text-sm text-foreground/60 mb-1">Fecha de Reclamación</p>
-            <p className="font-paragraph text-xl font-bold text-foreground">
+            <p className="font-paragraph text-sm text-halloween-purple-bright font-bold uppercase tracking-wider mb-1">Fecha de Reclamación</p>
+            <p className="font-heading text-xl text-halloween-orange-light">
               {config.presidencyClaimedAt 
                 ? new Date(config.presidencyClaimedAt).toLocaleDateString('es-ES')
                 : 'No disponible'}
@@ -92,8 +92,8 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-          <p className="font-paragraph text-sm text-foreground">
+        <div className="mt-6 p-4 bg-halloween-purple/30 rounded-lg border border-halloween-purple/50">
+          <p className="font-paragraph text-sm text-foreground/80">
             <strong>Nota:</strong> La presidencia solo puede cambiar mediante un procedimiento administrativo autorizado.
             No es posible reclamarla nuevamente desde esta interfaz.
           </p>
@@ -106,20 +106,20 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl p-8 border border-gray-200"
+      className="bg-halloween-purple/20 rounded-2xl p-8 border border-halloween-purple/40"
     >
       <div className="flex items-center gap-4 mb-6">
-        <Crown className="w-8 h-8 text-accent-gold" />
+        <Crown className="w-8 h-8 text-halloween-orange-light" />
         <div>
-          <h2 className="font-heading text-2xl text-foreground">Reclamar Presidencia</h2>
+          <h2 className="font-heading text-2xl text-halloween-orange-light">Reclamar Presidencia</h2>
           <p className="font-paragraph text-foreground/60">
             La presidencia aún no ha sido reclamada
           </p>
         </div>
       </div>
 
-      <div className="mb-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200 flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+      <div className="mb-6 p-4 bg-halloween-orange/10 rounded-lg border border-halloween-orange/30 flex items-start gap-3">
+        <AlertTriangle className="w-5 h-5 text-halloween-orange-light flex-shrink-0 mt-0.5" />
         <div>
           <p className="font-paragraph text-sm text-foreground font-medium mb-2">
             Importante: Esta acción es permanente
@@ -136,17 +136,17 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
       {!showConfirmation ? (
         <Button
           onClick={() => setShowConfirmation(true)}
-          className="bg-accent-gold text-dark-night-blue hover:bg-accent-gold/90"
+          className="bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
         >
           <Crown className="w-4 h-4 mr-2" />
           Reclamar Presidencia
         </Button>
       ) : (
-        <div className="space-y-4 bg-gray-50 rounded-xl p-6 border border-gray-200">
-          <h3 className="font-heading text-lg text-foreground">Confirmar Reclamación</h3>
+        <div className="space-y-4 bg-halloween-purple/30 rounded-xl p-6 border border-halloween-purple/50">
+          <h3 className="font-heading text-lg text-halloween-orange-light">Confirmar Reclamación</h3>
           
           <div>
-            <Label htmlFor="presidentName" className="font-paragraph">
+            <Label htmlFor="presidentName" className="font-paragraph text-foreground">
               Nombre del Presidente
             </Label>
             <Input
@@ -154,7 +154,7 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
               value={presidentName}
               onChange={(e) => setPresidentName(e.target.value)}
               placeholder="Ingresa tu nombre"
-              className="mt-2"
+              className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
             />
           </div>
 
@@ -162,7 +162,7 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
             <Button
               onClick={handleClaimPresidency}
               disabled={isClaiming || !presidentName.trim()}
-              className="flex-1 bg-accent-gold text-dark-night-blue hover:bg-accent-gold/90"
+              className="flex-1 bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
             >
               {isClaiming ? 'Procesando...' : 'Confirmar Reclamación'}
             </Button>
@@ -172,7 +172,7 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
                 setPresidentName('');
               }}
               variant="outline"
-              className="flex-1"
+              className="flex-1 border-halloween-purple/40 text-foreground hover:bg-halloween-purple/20"
             >
               Cancelar
             </Button>

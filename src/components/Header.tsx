@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Menu, X, Shield } from 'lucide-react';
+import { Menu, X, Shield, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useMember } from '@/integrations';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { member, isAuthenticated, actions } = useMember();
 
   const navItems = [
     { label: 'Inicio', path: '/' },
@@ -65,6 +67,35 @@ export default function Header() {
             <span>ADMIN</span>
           </Link>
 
+          {/* Auth Buttons - Desktop */}
+          <div className="hidden md:flex items-center gap-3">
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-foreground hover:text-halloween-orange-light px-4 py-2 rounded-lg transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="text-sm font-medium">{member?.profile?.nickname || 'Perfil'}</span>
+                </Link>
+                <button
+                  onClick={actions.logout}
+                  className="flex items-center gap-2 text-foreground hover:text-halloween-orange-light px-4 py-2 rounded-lg transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="text-sm font-medium">Salir</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={actions.login}
+                className="bg-halloween-purple text-foreground hover:bg-halloween-purple-bright px-6 py-2 rounded-lg font-bold transition-all duration-300"
+              >
+                Iniciar Sesión
+              </button>
+            )}
+          </div>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -108,6 +139,42 @@ export default function Header() {
                   <Shield className="w-4 h-4" />
                   ADMIN PANEL
                 </Link>
+                
+                {/* Mobile Auth Buttons */}
+                <div className="border-t border-halloween-purple/30 pt-4 mt-4 space-y-2">
+                  {isAuthenticated ? (
+                    <>
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="font-paragraph flex items-center gap-2 text-foreground hover:text-halloween-orange-light px-4 py-2 rounded-lg transition-all duration-300 hover:bg-halloween-purple/20"
+                      >
+                        <User className="w-4 h-4" />
+                        <span>{member?.profile?.nickname || 'Mi Perfil'}</span>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          actions.logout();
+                          setIsMenuOpen(false);
+                        }}
+                        className="w-full font-paragraph flex items-center gap-2 text-foreground hover:text-halloween-orange-light px-4 py-2 rounded-lg transition-all duration-300 hover:bg-halloween-purple/20"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Cerrar Sesión</span>
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        actions.login();
+                        setIsMenuOpen(false);
+                      }}
+                      className="w-full font-paragraph bg-halloween-purple text-foreground hover:bg-halloween-purple-bright px-4 py-2 rounded-lg font-bold transition-all duration-300"
+                    >
+                      Iniciar Sesión
+                    </button>
+                  )}
+                </div>
               </div>
             </motion.nav>
           )}

@@ -138,8 +138,16 @@ export interface MiembrosdelaGuaridaVirgilio {
   _id: string;
   _createdDate?: Date;
   _updatedDate?: Date;
+  /** @wixFieldType number */
+  ahorroBloqueado?: number;
+  /** @wixFieldType date */
+  fechaDesbloqueoAhorro?: Date | string;
   /** @wixFieldType text */
   memberName?: string;
+  /** @wixFieldType number */
+  ahorrosPersonales?: number;
+  /** @wixFieldType text */
+  email?: string;
   /** @wixFieldType number */
   availablePoints?: number;
   /** @wixFieldType datetime */
