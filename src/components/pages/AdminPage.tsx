@@ -87,7 +87,7 @@ export default function AdminPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-halloween-black">
         <Header />
         
         <main className="w-full py-16 px-4">
@@ -95,11 +95,13 @@ export default function AdminPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl p-8 border border-gray-200"
+              className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40"
             >
               <div className="text-center mb-8">
-                <Shield className="w-16 h-16 mx-auto mb-4 text-primary" />
-                <h1 className="font-heading text-3xl text-foreground mb-2">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-halloween-orange/20 flex items-center justify-center">
+                  <Shield className="w-8 h-8 text-halloween-orange-light" />
+                </div>
+                <h1 className="font-heading text-3xl text-halloween-orange-light mb-2">
                   Panel Administrativo
                 </h1>
                 <p className="font-paragraph text-foreground/60">
@@ -109,7 +111,7 @@ export default function AdminPage() {
 
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="code" className="font-paragraph">Código de Acceso</Label>
+                  <Label htmlFor="code" className="font-paragraph text-foreground">Código de Acceso</Label>
                   <Input
                     id="code"
                     type="password"
@@ -119,7 +121,7 @@ export default function AdminPage() {
                       setError('');
                     }}
                     placeholder="Ingresa el código"
-                    className="mt-2"
+                    className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                     onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
                   />
                 </div>
@@ -131,7 +133,7 @@ export default function AdminPage() {
                 <Button
                   onClick={handleLogin}
                   disabled={isLoading || !code}
-                  className="w-full bg-primary text-primary-foreground"
+                  className="w-full bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   {isLoading ? 'Verificando...' : 'Acceder'}
@@ -147,26 +149,26 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-halloween-black">
       <Header />
       
       <main className="w-full">
         {/* Admin Header */}
-        <section className="w-full bg-primary text-primary-foreground py-12 px-4">
+        <section className="w-full bg-halloween-purple text-foreground py-12 px-4">
           <div className="max-w-[100rem] mx-auto">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="font-heading text-3xl md:text-4xl mb-2">
+                <h1 className="font-heading text-3xl md:text-4xl mb-2 text-halloween-orange-light">
                   Panel Administrativo
                 </h1>
-                <p className="font-paragraph text-primary-foreground/80">
+                <p className="font-paragraph text-foreground/80">
                   Gestión completa del sistema bancario
                 </p>
               </div>
               <Button
                 onClick={() => setIsAuthenticated(false)}
                 variant="outline"
-                className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+                className="bg-transparent border-halloween-orange text-halloween-orange hover:bg-halloween-orange/10"
               >
                 Cerrar Sesión
               </Button>
@@ -178,40 +180,40 @@ export default function AdminPage() {
         <section className="w-full py-8 px-4">
           <div className="max-w-[100rem] mx-auto">
             <Tabs defaultValue="presidency" className="w-full">
-              <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-9 gap-2 h-auto bg-white p-2 rounded-xl border border-gray-200 mb-8">
-                <TabsTrigger value="presidency" className="flex items-center gap-2 data-[state=active]:bg-accent-gold data-[state=active]:text-dark-night-blue">
+              <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-9 gap-2 h-auto bg-halloween-purple/20 p-2 rounded-xl border border-halloween-purple/40 mb-8">
+                <TabsTrigger value="presidency" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
                   <Crown className="w-4 h-4" />
                   <span className="hidden md:inline">Presidencia</span>
                 </TabsTrigger>
-                <TabsTrigger value="economy" className="flex items-center gap-2 data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground">
+                <TabsTrigger value="economy" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black">
                   <TrendingUp className="w-4 h-4" />
                   <span className="hidden md:inline">Economía</span>
                 </TabsTrigger>
-                <TabsTrigger value="reserve" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger value="reserve" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
                   <Wallet className="w-4 h-4" />
                   <span className="hidden md:inline">Reserva</span>
                 </TabsTrigger>
-                <TabsTrigger value="members" className="flex items-center gap-2 data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground">
+                <TabsTrigger value="members" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black">
                   <Users className="w-4 h-4" />
                   <span className="hidden md:inline">Miembros</span>
                 </TabsTrigger>
-                <TabsTrigger value="monetary" className="flex items-center gap-2 data-[state=active]:bg-accent-gold data-[state=active]:text-dark-night-blue">
+                <TabsTrigger value="monetary" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
                   <DollarSign className="w-4 h-4" />
                   <span className="hidden md:inline">Emisiones</span>
                 </TabsTrigger>
-                <TabsTrigger value="projects" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger value="projects" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
                   <FileText className="w-4 h-4" />
                   <span className="hidden md:inline">Proyectos</span>
                 </TabsTrigger>
-                <TabsTrigger value="transfers" className="flex items-center gap-2 data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground">
+                <TabsTrigger value="transfers" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black">
                   <Send className="w-4 h-4" />
                   <span className="hidden md:inline">Transferencias</span>
                 </TabsTrigger>
-                <TabsTrigger value="audit" className="flex items-center gap-2 data-[state=active]:bg-accent-gold data-[state=active]:text-dark-night-blue">
+                <TabsTrigger value="audit" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
                   <History className="w-4 h-4" />
                   <span className="hidden md:inline">Auditoría</span>
                 </TabsTrigger>
-                <TabsTrigger value="config" className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TabsTrigger value="config" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
                   <Settings className="w-4 h-4" />
                   <span className="hidden md:inline">Config</span>
                 </TabsTrigger>

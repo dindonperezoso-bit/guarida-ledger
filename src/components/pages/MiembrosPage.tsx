@@ -73,12 +73,12 @@ export default function MiembrosPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-halloween-black">
       <Header />
       
       <main className="w-full">
         {/* Hero Section */}
-        <section className="w-full bg-secondary text-secondary-foreground py-16 px-4">
+        <section className="w-full bg-halloween-purple-bright text-halloween-black py-16 px-4">
           <div className="max-w-[100rem] mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

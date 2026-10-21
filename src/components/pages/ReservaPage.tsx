@@ -39,12 +39,12 @@ export default function ReservaPage() {
   const remaining = Math.max(0, minimumReserve - currentBalance);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-halloween-black">
       <Header />
       
       <main className="w-full">
         {/* Hero Section */}
-        <section className="w-full bg-primary text-primary-foreground py-16 px-4">
+        <section className="w-full bg-halloween-purple text-foreground py-16 px-4">
           <div className="max-w-[100rem] mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -52,11 +52,11 @@ export default function ReservaPage() {
               transition={{ duration: 0.6 }}
               className="text-center"
             >
-              <Wallet className="w-16 h-16 mx-auto mb-6" />
-              <h1 className="font-heading text-4xl md:text-6xl mb-4">
+              <Wallet className="w-16 h-16 mx-auto mb-6 text-halloween-orange-light" />
+              <h1 className="font-heading text-4xl md:text-6xl mb-4 text-halloween-orange-light">
                 Reserva Bancaria
               </h1>
-              <p className="font-paragraph text-xl text-primary-foreground/80">
+              <p className="font-paragraph text-xl text-foreground/70">
                 Gestión y seguimiento de la reserva del banco
               </p>
             </motion.div>
@@ -64,7 +64,7 @@ export default function ReservaPage() {
         </section>
 
         {/* Reserve Dashboard */}
-        <section className="w-full py-16 px-4">
+        <section className="w-full py-16 px-4 bg-halloween-black border-t border-halloween-purple/30">
           <div className="max-w-[100rem] mx-auto">
             <div className="min-h-[400px]">
               {isLoading ? null : (
@@ -75,9 +75,9 @@ export default function ReservaPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="bg-white rounded-xl p-6 border border-gray-200"
+                      className="bg-halloween-purple/20 rounded-xl p-6 border border-halloween-purple/40"
                     >
-                      <h3 className="font-heading text-lg text-foreground mb-4">Saldo Actual</h3>
+                      <h3 className="font-heading text-lg text-halloween-purple-bright mb-4">Saldo Actual</h3>
                       <p className="font-paragraph text-3xl font-bold text-primary">
                         {currentBalance.toLocaleString()} P
                       </p>
