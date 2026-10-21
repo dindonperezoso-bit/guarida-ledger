@@ -2,6 +2,10 @@ import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
+import HomePage from '@/components/pages/HomePage';
+import ReservaPage from '@/components/pages/ReservaPage';
+import MiembrosPage from '@/components/pages/MiembrosPage';
+import AdminPage from '@/components/pages/AdminPage';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -21,9 +25,30 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <div>Wix Vibe</div>,
+        element: <HomePage />,
         routeMetadata: {
           pageIdentifier: 'home',
+        },
+      },
+      {
+        path: "reserva",
+        element: <ReservaPage />,
+        routeMetadata: {
+          pageIdentifier: 'reserva',
+        },
+      },
+      {
+        path: "miembros",
+        element: <MiembrosPage />,
+        routeMetadata: {
+          pageIdentifier: 'miembros',
+        },
+      },
+      {
+        path: "admin",
+        element: <AdminPage />,
+        routeMetadata: {
+          pageIdentifier: 'admin',
         },
       },
       {
