@@ -13,7 +13,7 @@ export default function Header() {
     { label: 'Economía', path: '/' },
     { label: 'Reserva', path: '/reserva' },
     { label: 'Miembros', path: '/miembros' },
-    { label: 'Transacciones', path: '/miembros' },
+    { label: 'Transferencias', path: '/transferencias' },
     { label: 'Proyectos', path: '/admin' },
     { label: 'Historial', path: '/' },
   ];

@@ -8,6 +8,7 @@ import ReservaPage from '@/components/pages/ReservaPage';
 import MiembrosPage from '@/components/pages/MiembrosPage';
 import AdminPage from '@/components/pages/AdminPage';
 import ProfilePage from '@/components/pages/ProfilePage';
+import TransferenciasPage from '@/components/pages/TransferenciasPage';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -62,6 +63,17 @@ const router = createBrowserRouter([
         ),
         routeMetadata: {
           pageIdentifier: 'profile',
+        },
+      },
+      {
+        path: "transferencias",
+        element: (
+          <MemberProtectedRoute messageToSignIn="Inicia sesión para realizar transferencias">
+            <TransferenciasPage />
+          </MemberProtectedRoute>
+        ),
+        routeMetadata: {
+          pageIdentifier: 'transferencias',
         },
       },
       {
