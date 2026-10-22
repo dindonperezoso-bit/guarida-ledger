@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BaseCrudService } from '@/integrations';
 import { ConfiguracindelSistema, CargosyPermisos, MiembrosdelaGuaridaVirgilio } from '@/entities';
-import { Shield, Lock, Crown, Users, DollarSign, FileText, History, Settings, TrendingUp, Wallet, Send } from 'lucide-react';
+import { Shield, Lock, Crown, Users, DollarSign, FileText, History, Settings, TrendingUp, Wallet, Send, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -18,6 +18,7 @@ import ProjectsSection from '@/components/admin/ProjectsSection';
 import TransfersSection from '@/components/admin/TransfersSection';
 import AuditSection from '@/components/admin/AuditSection';
 import ConfigSection from '@/components/admin/ConfigSection';
+import ResetSection from '@/components/admin/ResetSection';
 
 const ADMIN_CODE = '0001';
 
@@ -180,42 +181,46 @@ export default function AdminPage() {
         <section className="w-full py-8 px-4">
           <div className="max-w-[100rem] mx-auto">
             <Tabs defaultValue="presidency" className="w-full">
-              <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-9 gap-2 h-auto bg-halloween-purple/20 p-2 rounded-xl border border-halloween-purple/40 mb-8">
-                <TabsTrigger value="presidency" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
+              <TabsList className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-2 h-auto bg-halloween-purple/20 p-2 rounded-xl border border-halloween-purple/40 mb-8 overflow-x-auto">
+                <TabsTrigger value="presidency" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black whitespace-nowrap">
                   <Crown className="w-4 h-4" />
                   <span className="hidden md:inline">Presidencia</span>
                 </TabsTrigger>
-                <TabsTrigger value="economy" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black">
+                <TabsTrigger value="economy" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black whitespace-nowrap">
                   <TrendingUp className="w-4 h-4" />
                   <span className="hidden md:inline">Economía</span>
                 </TabsTrigger>
-                <TabsTrigger value="reserve" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
+                <TabsTrigger value="reserve" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black whitespace-nowrap">
                   <Wallet className="w-4 h-4" />
                   <span className="hidden md:inline">Reserva</span>
                 </TabsTrigger>
-                <TabsTrigger value="members" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black">
+                <TabsTrigger value="members" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black whitespace-nowrap">
                   <Users className="w-4 h-4" />
                   <span className="hidden md:inline">Miembros</span>
                 </TabsTrigger>
-                <TabsTrigger value="monetary" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
+                <TabsTrigger value="monetary" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black whitespace-nowrap">
                   <DollarSign className="w-4 h-4" />
                   <span className="hidden md:inline">Emisiones</span>
                 </TabsTrigger>
-                <TabsTrigger value="projects" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
+                <TabsTrigger value="projects" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black whitespace-nowrap">
                   <FileText className="w-4 h-4" />
                   <span className="hidden md:inline">Proyectos</span>
                 </TabsTrigger>
-                <TabsTrigger value="transfers" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black">
+                <TabsTrigger value="transfers" className="flex items-center gap-2 data-[state=active]:bg-halloween-purple-bright data-[state=active]:text-halloween-black whitespace-nowrap">
                   <Send className="w-4 h-4" />
                   <span className="hidden md:inline">Transferencias</span>
                 </TabsTrigger>
-                <TabsTrigger value="audit" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
+                <TabsTrigger value="audit" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black whitespace-nowrap">
                   <History className="w-4 h-4" />
                   <span className="hidden md:inline">Auditoría</span>
                 </TabsTrigger>
-                <TabsTrigger value="config" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black">
+                <TabsTrigger value="config" className="flex items-center gap-2 data-[state=active]:bg-halloween-orange data-[state=active]:text-halloween-black whitespace-nowrap">
                   <Settings className="w-4 h-4" />
                   <span className="hidden md:inline">Config</span>
+                </TabsTrigger>
+                <TabsTrigger value="reset" className="flex items-center gap-2 data-[state=active]:bg-destructive data-[state=active]:text-white whitespace-nowrap">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span className="hidden md:inline">Reset</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -253,6 +258,10 @@ export default function AdminPage() {
 
               <TabsContent value="config">
                 <ConfigSection config={config} onConfigUpdate={loadConfig} />
+              </TabsContent>
+
+              <TabsContent value="reset">
+                <ResetSection />
               </TabsContent>
             </Tabs>
           </div>
