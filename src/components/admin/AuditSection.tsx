@@ -27,12 +27,12 @@ export default function AuditSection() {
     switch (result?.toLowerCase()) {
       case 'exitoso':
       case 'aprobado':
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
+        return <CheckCircle className="w-5 h-5 text-green-400" />;
       case 'rechazado':
       case 'fallido':
-        return <XCircle className="w-5 h-5 text-red-500" />;
+        return <XCircle className="w-5 h-5 text-red-400" />;
       default:
-        return <AlertCircle className="w-5 h-5 text-yellow-500" />;
+        return <AlertCircle className="w-5 h-5 text-yellow-400" />;
     }
   };
 
@@ -40,12 +40,12 @@ export default function AuditSection() {
     switch (result?.toLowerCase()) {
       case 'exitoso':
       case 'aprobado':
-        return 'bg-green-100 text-green-700';
+        return 'bg-green-500/20 text-green-400';
       case 'rechazado':
       case 'fallido':
-        return 'bg-red-100 text-red-700';
+        return 'bg-red-500/20 text-red-400';
       default:
-        return 'bg-yellow-100 text-yellow-700';
+        return 'bg-yellow-500/20 text-yellow-400';
     }
   };
 
@@ -54,12 +54,12 @@ export default function AuditSection() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl p-8 border border-gray-200"
+        className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40"
       >
         <div className="flex items-center gap-4 mb-6">
-          <History className="w-8 h-8 text-accent-gold" />
+          <History className="w-8 h-8 text-halloween-orange-light" />
           <div>
-            <h2 className="font-heading text-2xl text-foreground">Historial de Auditoría</h2>
+            <h2 className="font-heading text-2xl text-halloween-orange-light">Historial de Auditoría</h2>
             <p className="font-paragraph text-foreground/60">
               Registro completo de todas las operaciones del sistema
             </p>
@@ -75,18 +75,18 @@ export default function AuditSection() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="font-heading text-left py-4 px-4">Fecha y Hora</th>
-                    <th className="font-heading text-left py-4 px-4">Tipo de Acción</th>
-                    <th className="font-heading text-left py-4 px-4">Usuario Responsable</th>
-                    <th className="font-heading text-left py-4 px-4">Descripción</th>
-                    <th className="font-heading text-center py-4 px-4">Resultado</th>
+                  <tr className="border-b border-halloween-purple/40">
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha y Hora</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Tipo de Acción</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Usuario Responsable</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Descripción</th>
+                    <th className="font-heading text-center py-4 px-4 text-halloween-purple-bright">Resultado</th>
                   </tr>
                 </thead>
                 <tbody>
                   {auditLogs.map((log) => (
-                    <tr key={log._id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                    <tr key={log._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {log.timestamp 
                           ? new Date(log.timestamp).toLocaleString('es-ES', {
                               year: 'numeric',
@@ -97,13 +97,13 @@ export default function AuditSection() {
                             })
                           : 'N/A'}
                       </td>
-                      <td className="font-paragraph py-4 px-4">
+                      <td className="font-paragraph py-4 px-4 text-foreground">
                         <span className="font-medium">{log.actionType}</span>
                       </td>
-                      <td className="font-paragraph py-4 px-4">
+                      <td className="font-paragraph py-4 px-4 text-foreground">
                         {log.responsibleUser || 'Sistema'}
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {log.description}
                       </td>
                       <td className="font-paragraph py-4 px-4">

@@ -78,7 +78,7 @@ export default function ReservaPage() {
                       className="bg-halloween-purple/20 rounded-xl p-6 border border-halloween-purple/40"
                     >
                       <h3 className="font-heading text-lg text-halloween-purple-bright mb-4">Saldo Actual</h3>
-                      <p className="font-paragraph text-3xl font-bold text-primary">
+                      <p className="font-paragraph text-3xl font-bold text-halloween-orange-light">
                         {currentBalance.toLocaleString()} P
                       </p>
                     </motion.div>
@@ -87,15 +87,15 @@ export default function ReservaPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
-                      className="bg-white rounded-xl p-6 border border-gray-200"
+                      className="bg-halloween-purple/20 rounded-xl p-6 border border-halloween-purple/40"
                     >
-                      <h3 className="font-heading text-lg text-foreground mb-4">Porcentaje Alcanzado</h3>
-                      <p className="font-paragraph text-3xl font-bold text-secondary">
+                      <h3 className="font-heading text-lg text-halloween-purple-bright mb-4">Porcentaje Alcanzado</h3>
+                      <p className="font-paragraph text-3xl font-bold text-halloween-purple-bright">
                         {percentage.toFixed(2)}%
                       </p>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
+                      <div className="w-full bg-halloween-purple/30 rounded-full h-2 mt-4">
                         <div
-                          className="bg-secondary h-2 rounded-full transition-all duration-500"
+                          className="bg-halloween-purple-bright h-2 rounded-full transition-all duration-500"
                           style={{ width: `${Math.min(percentage, 100)}%` }}
                         />
                       </div>
@@ -105,10 +105,10 @@ export default function ReservaPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
-                      className="bg-white rounded-xl p-6 border border-gray-200"
+                      className="bg-halloween-orange/10 rounded-xl p-6 border border-halloween-orange/30"
                     >
-                      <h3 className="font-heading text-lg text-foreground mb-4">Faltante</h3>
-                      <p className="font-paragraph text-3xl font-bold text-accent-gold">
+                      <h3 className="font-heading text-lg text-halloween-orange-light mb-4">Faltante</h3>
+                      <p className="font-paragraph text-3xl font-bold text-halloween-orange-light">
                         {remaining.toLocaleString()} P
                       </p>
                     </motion.div>
@@ -117,10 +117,10 @@ export default function ReservaPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
-                      className="bg-white rounded-xl p-6 border border-gray-200"
+                      className="bg-halloween-purple/20 rounded-xl p-6 border border-halloween-purple/40"
                     >
-                      <h3 className="font-heading text-lg text-foreground mb-4">Objetivo</h3>
-                      <p className="font-paragraph text-3xl font-bold text-foreground">
+                      <h3 className="font-heading text-lg text-halloween-purple-bright mb-4">Objetivo</h3>
+                      <p className="font-paragraph text-3xl font-bold text-halloween-orange-light">
                         {minimumReserve.toLocaleString()} P
                       </p>
                     </motion.div>
@@ -131,9 +131,9 @@ export default function ReservaPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
-                    className="bg-white rounded-xl p-8 border border-gray-200"
+                    className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40"
                   >
-                    <h2 className="font-heading text-2xl text-foreground mb-6">Historial de Movimientos</h2>
+                    <h2 className="font-heading text-2xl text-halloween-orange-light mb-6">Historial de Movimientos</h2>
                     
                     {movements.length === 0 ? (
                       <p className="font-paragraph text-foreground/60 text-center py-8">
@@ -143,19 +143,19 @@ export default function ReservaPage() {
                       <div className="overflow-x-auto">
                         <table className="w-full">
                           <thead>
-                            <tr className="border-b border-gray-200">
-                              <th className="font-heading text-left py-4 px-4">Fecha</th>
-                              <th className="font-heading text-left py-4 px-4">Tipo</th>
-                              <th className="font-heading text-left py-4 px-4">Descripción</th>
-                              <th className="font-heading text-right py-4 px-4">Monto</th>
-                              <th className="font-heading text-right py-4 px-4">Saldo</th>
-                              <th className="font-heading text-left py-4 px-4">Responsable</th>
+                            <tr className="border-b border-halloween-purple/40">
+                              <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha</th>
+                              <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Tipo</th>
+                              <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Descripción</th>
+                              <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Monto</th>
+                              <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Saldo</th>
+                              <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Responsable</th>
                             </tr>
                           </thead>
                           <tbody>
                             {movements.map((movement) => (
-                              <tr key={movement._id} className="border-b border-gray-100 hover:bg-gray-50">
-                                <td className="font-paragraph py-4 px-4 text-sm">
+                              <tr key={movement._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
+                                <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                                   {movement.movementDateTime 
                                     ? new Date(movement.movementDateTime).toLocaleDateString('es-ES')
                                     : 'N/A'}
@@ -163,26 +163,26 @@ export default function ReservaPage() {
                                 <td className="font-paragraph py-4 px-4">
                                   <div className="flex items-center gap-2">
                                     {movement.movementType === 'Entrada' ? (
-                                      <TrendingUp className="w-4 h-4 text-green-500" />
+                                      <TrendingUp className="w-4 h-4 text-green-400" />
                                     ) : (
-                                      <TrendingDown className="w-4 h-4 text-red-500" />
+                                      <TrendingDown className="w-4 h-4 text-red-400" />
                                     )}
-                                    <span className="text-sm">{movement.movementType}</span>
+                                    <span className="text-sm text-foreground">{movement.movementType}</span>
                                   </div>
                                 </td>
-                                <td className="font-paragraph py-4 px-4 text-sm">
+                                <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                                   {movement.description || 'Sin descripción'}
                                 </td>
                                 <td className={`font-paragraph py-4 px-4 text-right font-bold ${
-                                  movement.movementType === 'Entrada' ? 'text-green-500' : 'text-red-500'
+                                  movement.movementType === 'Entrada' ? 'text-green-400' : 'text-red-400'
                                 }`}>
                                   {movement.movementType === 'Entrada' ? '+' : '-'}
                                   {Math.abs(movement.amount || 0).toLocaleString()} P
                                 </td>
-                                <td className="font-paragraph py-4 px-4 text-right font-bold text-primary">
+                                <td className="font-paragraph py-4 px-4 text-right font-bold text-halloween-orange-light">
                                   {(movement.currentReserveBalance || 0).toLocaleString()} P
                                 </td>
-                                <td className="font-paragraph py-4 px-4 text-sm">
+                                <td className="font-paragraph py-4 px-4 text-sm text-foreground/70">
                                   {movement.responsibleUser || 'Sistema'}
                                 </td>
                               </tr>

@@ -1,4 +1,3 @@
-// HPI 1.7-G
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BaseCrudService } from '@/integrations';
@@ -13,7 +12,6 @@ const MINIMUM_ECONOMY = 200000000;
 const CRITICAL_LEVEL = 60000000;
 
 export default function HomePage() {
-  // --- CANONICAL DATA SOURCES (PRESERVED) ---
   const [economyData, setEconomyData] = useState<EconomaGeneral | null>(null);
   const [config, setConfig] = useState<ConfiguracindelSistema | null>(null);
   const [history, setHistory] = useState<EconomaGeneral[]>([]);
