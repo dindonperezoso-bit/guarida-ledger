@@ -29,13 +29,20 @@ export default function HomePage() {
         BaseCrudService.getAll<EconomaGeneral>('economia', {}, { limit: 10 })
       ]);
 
+      // Get the latest economy record (first in the list)
       if (economyResult.items.length > 0) {
         setEconomyData(economyResult.items[0]);
       }
       if (configResult.items.length > 0) {
         setConfig(configResult.items[0]);
       }
-      setHistory(historyResult.items);
+      // History should be sorted by date descending
+      const sortedHistory = historyResult.items.sort((a, b) => {
+        const dateA = new Date(a.fechaHora || 0).getTime();
+        const dateB = new Date(b.fechaHora || 0).getTime();
+        return dateB - dateA;
+      });
+      setHistory(sortedHistory);
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {

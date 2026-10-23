@@ -40,20 +40,46 @@ export default function ResetSection() {
       }
 
       // Crear configuración inicial limpia
-      await BaseCrudService.create('configuracion', {
+      const configResult = await BaseCrudService.getAll('configuracion', {}, { limit: 1 });
+      if (configResult.items.length > 0) {
+        // Update existing config
+        await BaseCrudService.update('configuracion', {
+          _id: configResult.items[0]._id,
+          isPresidencyClaimed: false,
+          currentPresidentMemberId: '',
+          presidencyClaimedAt: undefined,
+          minimumEconomicPoints: 200000000,
+          criticalEconomicLevel: 60000000,
+          adminAccessCode: '0001',
+          referenceConversionRate: 1200000
+        });
+      } else {
+        // Create new config
+        await BaseCrudService.create('configuracion', {
+          _id: crypto.randomUUID(),
+          configName: 'Sistema Principal',
+          isPresidencyClaimed: false,
+          currentPresidentMemberId: '',
+          minimumEconomicPoints: 200000000,
+          criticalEconomicLevel: 60000000,
+          adminAccessCode: '0001',
+          referenceConversionRate: 1200000
+        });
+      }
+
+      // Create initial economy record with 0
+      await BaseCrudService.create('economia', {
         _id: crypto.randomUUID(),
-        configName: 'Sistema Principal',
-        isPresidencyClaimed: false,
-        currentPresidentMemberId: '',
-        minimumEconomicPoints: 200000000,
-        criticalEconomicLevel: 60000000,
-        adminAccessCode: '0001',
-        referenceConversionRate: 1200000
+        montoTotal: 0,
+        fechaHora: new Date().toISOString(),
+        tipoMovimiento: 'Inicialización',
+        cantidadCambio: 0,
+        descripcion: 'Sistema reseteado a cero'
       });
 
       setMessage({ 
         type: 'success', 
-        text: '✅ Sistema completamente reseteado. Todas las colecciones están vacías y listas para comenzar desde cero.' 
+        text: '✅ Sistema completamente reseteado. Economía en cero, presidencia liberada, todas las colecciones limpias.' 
       });
       setShowConfirmation(false);
     } catch (error) {

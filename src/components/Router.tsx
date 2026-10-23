@@ -1,6 +1,7 @@
 import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
+import { useEffect } from 'react';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import { MemberProtectedRoute } from '@/components/ui/member-protected-route';
 import HomePage from '@/components/pages/HomePage';
@@ -9,9 +10,15 @@ import MiembrosPage from '@/components/pages/MiembrosPage';
 import AdminPage from '@/components/pages/AdminPage';
 import ProfilePage from '@/components/pages/ProfilePage';
 import TransferenciasPage from '@/components/pages/TransferenciasPage';
+import { ensureSystemInitialized } from '@/lib/data-initialization';
 
-// Layout component that includes ScrollToTop
+// Layout component that includes ScrollToTop and system initialization
 function Layout() {
+  useEffect(() => {
+    // Initialize system on app load
+    ensureSystemInitialized().catch(err => console.error('Failed to initialize system:', err));
+  }, []);
+
   return (
     <>
       <ScrollToTop />

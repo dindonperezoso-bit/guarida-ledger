@@ -41,7 +41,25 @@ export default function TransferenciasPage() {
 
         // Encontrar el miembro actual
         if (member?.loginEmail) {
-          const current = items.find(m => m.email === member.loginEmail);
+          let current = items.find(m => m.email === member.loginEmail);
+          
+          // Si no existe, crear automáticamente
+          if (!current) {
+            const newMember: MiembrosdelaGuaridaVirgilio = {
+              _id: crypto.randomUUID(),
+              memberName: member.profile?.nickname || member.loginEmail?.split('@')[0] || 'Miembro',
+              email: member.loginEmail,
+              availablePoints: 0,
+              ahorrosPersonales: 0,
+              ahorroBloqueado: 0,
+              registrationDate: new Date().toISOString(),
+              lastActivityDate: new Date().toISOString(),
+              isOfficialMember: false
+            };
+            await BaseCrudService.create('miembros', newMember);
+            current = newMember;
+          }
+          
           setCurrentMember(current || null);
         }
       } catch (err) {

@@ -68,7 +68,7 @@ export default function MembersSection() {
     if (isNaN(change)) return;
 
     try {
-      const newPoints = (member.availablePoints || 0) + change;
+      const newPoints = Math.max(0, (member.availablePoints || 0) + change);
       
       // Update member points
       await BaseCrudService.update<MiembrosdelaGuaridaVirgilio>('miembros', {

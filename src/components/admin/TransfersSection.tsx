@@ -117,13 +117,13 @@ export default function TransfersSection() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl p-8 border border-gray-200"
+        className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <Send className="w-8 h-8 text-secondary" />
+            <Send className="w-8 h-8 text-halloween-orange-light" />
             <div>
-              <h2 className="font-heading text-2xl text-foreground">Transferencias y Pagos</h2>
+              <h2 className="font-heading text-2xl text-halloween-orange-light">Transferencias y Pagos</h2>
               <p className="font-paragraph text-foreground/60">
                 Gestiona transferencias entre miembros
               </p>
@@ -131,35 +131,35 @@ export default function TransfersSection() {
           </div>
           <Button
             onClick={() => setShowNewTransferForm(!showNewTransferForm)}
-            className="bg-secondary text-secondary-foreground"
+            className="bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
           >
             {showNewTransferForm ? 'Cancelar' : 'Nueva Transferencia'}
           </Button>
         </div>
 
         {showNewTransferForm && (
-          <div className="mb-6 bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <h3 className="font-heading text-lg text-foreground mb-4">Nueva Transferencia</h3>
+          <div className="mb-6 bg-halloween-purple/10 rounded-xl p-6 border border-halloween-purple/40">
+            <h3 className="font-heading text-lg text-halloween-orange-light mb-4">Nueva Transferencia</h3>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="transactionType" className="font-paragraph">Tipo de Transacción</Label>
+                <Label htmlFor="transactionType" className="font-paragraph text-foreground">Tipo de Transacción</Label>
                 <Input
                   id="transactionType"
                   value={formData.transactionType}
                   onChange={(e) => setFormData({ ...formData, transactionType: e.target.value })}
                   placeholder="Transferencia, Pago, etc."
-                  className="mt-2"
+                  className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="sender" className="font-paragraph">Remitente</Label>
+                  <Label htmlFor="sender" className="font-paragraph text-foreground">Remitente</Label>
                   <select
                     id="sender"
                     value={formData.senderMemberId}
                     onChange={(e) => setFormData({ ...formData, senderMemberId: e.target.value })}
-                    className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg font-paragraph"
+                    className="w-full mt-2 px-3 py-2 border border-halloween-purple/40 rounded-lg font-paragraph bg-halloween-purple/20 text-foreground"
                   >
                     <option value="">Seleccionar remitente</option>
                     {members.map((member) => (
@@ -171,12 +171,12 @@ export default function TransfersSection() {
                 </div>
 
                 <div>
-                  <Label htmlFor="receiver" className="font-paragraph">Destinatario</Label>
+                  <Label htmlFor="receiver" className="font-paragraph text-foreground">Destinatario</Label>
                   <select
                     id="receiver"
                     value={formData.receiverMemberId}
                     onChange={(e) => setFormData({ ...formData, receiverMemberId: e.target.value })}
-                    className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg font-paragraph"
+                    className="w-full mt-2 px-3 py-2 border border-halloween-purple/40 rounded-lg font-paragraph bg-halloween-purple/20 text-foreground"
                   >
                     <option value="">Seleccionar destinatario</option>
                     {members.map((member) => (
@@ -189,25 +189,25 @@ export default function TransfersSection() {
               </div>
 
               <div>
-                <Label htmlFor="amount" className="font-paragraph">Cantidad</Label>
+                <Label htmlFor="amount" className="font-paragraph text-foreground">Cantidad</Label>
                 <Input
                   id="amount"
                   type="number"
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                   placeholder="0"
-                  className="mt-2"
+                  className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                 />
               </div>
 
               <div>
-                <Label htmlFor="description" className="font-paragraph">Descripción</Label>
+                <Label htmlFor="description" className="font-paragraph text-foreground">Descripción</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Describe el motivo de la transferencia"
-                  className="mt-2"
+                  className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                   rows={3}
                 />
               </div>
@@ -215,7 +215,7 @@ export default function TransfersSection() {
               <Button
                 onClick={handleCreateTransfer}
                 disabled={isSubmitting || !formData.senderMemberId || !formData.receiverMemberId || !formData.amount}
-                className="w-full bg-secondary text-secondary-foreground"
+                className="w-full bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
               >
                 {isSubmitting ? 'Procesando...' : 'Ejecutar Transferencia'}
               </Button>
@@ -228,39 +228,39 @@ export default function TransfersSection() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="font-heading text-left py-4 px-4">Fecha</th>
-                    <th className="font-heading text-left py-4 px-4">Tipo</th>
-                    <th className="font-heading text-left py-4 px-4">Remitente</th>
-                    <th className="font-heading text-left py-4 px-4">Destinatario</th>
-                    <th className="font-heading text-right py-4 px-4">Cantidad</th>
-                    <th className="font-heading text-left py-4 px-4">Descripción</th>
+                  <tr className="border-b border-halloween-purple/40">
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Tipo</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Remitente</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Destinatario</th>
+                    <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Cantidad</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Descripción</th>
                   </tr>
                 </thead>
                 <tbody>
                   {transfers.map((transfer) => (
-                    <tr key={transfer._id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                    <tr key={transfer._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {transfer.transactionDate 
                           ? new Date(transfer.transactionDate).toLocaleDateString('es-ES')
                           : 'N/A'}
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {transfer.transactionType}
                       </td>
-                      <td className="font-paragraph py-4 px-4">
+                      <td className="font-paragraph py-4 px-4 text-foreground">
                         {getMemberName(transfer.senderMemberId)}
                       </td>
-                      <td className="font-paragraph py-4 px-4">
+                      <td className="font-paragraph py-4 px-4 text-foreground">
                         <div className="flex items-center gap-2">
-                          <ArrowRight className="w-4 h-4 text-secondary" />
+                          <ArrowRight className="w-4 h-4 text-halloween-orange-light" />
                           {getMemberName(transfer.receiverMemberId)}
                         </div>
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-right font-bold text-secondary">
+                      <td className="font-paragraph py-4 px-4 text-right font-bold text-halloween-orange-light">
                         {(transfer.amount || 0).toLocaleString()} P
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground/70">
                         {transfer.description || 'Sin descripción'}
                       </td>
                     </tr>

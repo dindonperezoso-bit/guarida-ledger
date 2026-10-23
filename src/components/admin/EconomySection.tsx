@@ -39,11 +39,13 @@ export default function EconomySection() {
 
     setIsSubmitting(true);
     try {
-      const currentTotal = economyData.length > 0 ? economyData[0].montoTotal || 0 : 0;
+      // Get the latest economy record to calculate new total
+      const latestResult = await BaseCrudService.getAll<EconomaGeneral>('economia', {}, { limit: 1 });
+      const currentTotal = latestResult.items.length > 0 ? latestResult.items[0].montoTotal || 0 : 0;
       const changeAmount = parseFloat(formData.cantidadCambio);
       const newTotal = formData.tipoMovimiento === 'Aumento' 
         ? currentTotal + changeAmount 
-        : currentTotal - changeAmount;
+        : Math.max(0, currentTotal - changeAmount);
 
       await BaseCrudService.create('economia', {
         _id: crypto.randomUUID(),

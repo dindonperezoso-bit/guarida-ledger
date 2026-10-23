@@ -25,7 +25,25 @@ export default function ProfilePage() {
       setIsLoading(true);
       // Try to find member by email in the miembros collection
       const result = await BaseCrudService.getAll<MiembrosdelaGuaridaVirgilio>('miembros', {}, { limit: 100 });
-      const found = result.items.find(m => m.email === member.loginEmail);
+      let found = result.items.find(m => m.email === member.loginEmail);
+      
+      // If not found, create new member profile automatically
+      if (!found) {
+        const newMember: MiembrosdelaGuaridaVirgilio = {
+          _id: crypto.randomUUID(),
+          memberName: member.profile?.nickname || member.loginEmail?.split('@')[0] || 'Miembro',
+          email: member.loginEmail,
+          availablePoints: 0,
+          ahorrosPersonales: 0,
+          ahorroBloqueado: 0,
+          registrationDate: new Date().toISOString(),
+          lastActivityDate: new Date().toISOString(),
+          isOfficialMember: false
+        };
+        await BaseCrudService.create('miembros', newMember);
+        found = newMember;
+      }
+      
       if (found) {
         setMemberData(found);
       }

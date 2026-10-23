@@ -40,11 +40,13 @@ export default function ReserveSection() {
 
     setIsSubmitting(true);
     try {
-      const currentBalance = movements.length > 0 ? movements[0].currentReserveBalance || 0 : 0;
+      // Get the latest reserve movement to calculate new balance
+      const latestResult = await BaseCrudService.getAll<ReservaBancaria>('reserva', {}, { limit: 1 });
+      const currentBalance = latestResult.items.length > 0 ? latestResult.items[0].currentReserveBalance || 0 : 0;
       const changeAmount = parseFloat(formData.amount);
       const newBalance = formData.movementType === 'Entrada' 
         ? currentBalance + changeAmount 
-        : currentBalance - changeAmount;
+        : Math.max(0, currentBalance - changeAmount);
 
       await BaseCrudService.create('reserva', {
         _id: crypto.randomUUID(),
