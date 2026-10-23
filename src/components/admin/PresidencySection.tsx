@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { BaseCrudService } from '@/integrations';
 import { ConfiguracindelSistema, HistorialdeAuditora, MiembrosdelaGuaridaVirgilio } from '@/entities';
 import { Crown, AlertTriangle, CheckCircle } from 'lucide-react';
@@ -21,10 +21,29 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isUpdatingRef = useRef(false);
 
   useEffect(() => {
     loadMembers();
   }, []);
+
+  // Auto-clear message after 4 seconds
+  useEffect(() => {
+    if (message) {
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
+      messageTimeoutRef.current = setTimeout(() => {
+        setMessage(null);
+      }, 4000);
+    }
+    return () => {
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
+    };
+  }, [message]);
 
   const loadMembers = async () => {
     try {
@@ -38,11 +57,12 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
   };
 
   const handleClaimPresidency = async () => {
-    if (!selectedMemberId || !config) return;
+    if (!selectedMemberId || !config || isUpdatingRef.current) return;
 
     const selectedMember = members.find(m => m._id === selectedMemberId);
     if (!selectedMember) return;
 
+    isUpdatingRef.current = true;
     setIsClaiming(true);
     try {
       // Update config to mark presidency as claimed
@@ -66,19 +86,24 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
       setMessage({ type: 'success', text: `¡${selectedMember.memberName} es ahora el presidente!` });
       setShowConfirmation(false);
       setSelectedMemberId('');
-      // Call immediately without setTimeout to prevent UI freeze
-      onConfigUpdate();
+      
+      // Call onConfigUpdate after a brief delay to ensure UI updates
+      setTimeout(() => {
+        onConfigUpdate();
+      }, 100);
     } catch (error) {
       console.error('Error claiming presidency:', error);
       setMessage({ type: 'error', text: 'Error al reclamar la presidencia' });
     } finally {
       setIsClaiming(false);
+      isUpdatingRef.current = false;
     }
   };
 
   const handleReleasePresidency = async () => {
-    if (!config) return;
+    if (!config || isUpdatingRef.current) return;
 
+    isUpdatingRef.current = true;
     setIsClaiming(true);
     try {
       await BaseCrudService.update<ConfiguracindelSistema>('configuracion', {
@@ -99,13 +124,17 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
       });
 
       setMessage({ type: 'success', text: 'Presidencia liberada exitosamente' });
-      // Call immediately without setTimeout to prevent UI freeze
-      onConfigUpdate();
+      
+      // Call onConfigUpdate after a brief delay to ensure UI updates
+      setTimeout(() => {
+        onConfigUpdate();
+      }, 100);
     } catch (error) {
       console.error('Error releasing presidency:', error);
       setMessage({ type: 'error', text: 'Error al liberar la presidencia' });
     } finally {
       setIsClaiming(false);
+      isUpdatingRef.current = false;
     }
   };
 
@@ -152,7 +181,7 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
               variant="outline"
               className="border-halloween-orange text-halloween-orange hover:bg-halloween-orange/10"
             >
-              Liberar Presidencia
+              {isClaiming ? 'Liberando...' : 'Liberar Presidencia'}
             </Button>
           </div>
         ) : (
@@ -167,8 +196,8 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
           <div className="space-y-4">
             <div>
               <Label className="font-paragraph text-foreground">Seleccionar Miembro</Label>
-              <Select value={selectedMemberId} onValueChange={setSelectedMemberId}>
-                <SelectTrigger className="bg-halloween-black/50 border-halloween-purple-bright/30 text-foreground mt-2">
+              <Select value={selectedMemberId} onValueChange={setSelectedMemberId} disabled={isClaiming}>
+                <SelectTrigger className="bg-halloween-black/50 border-halloween-purple-bright/30 text-foreground mt-2 disabled:opacity-50">
                   <SelectValue placeholder="Elige un miembro" />
                 </SelectTrigger>
                 <SelectContent className="bg-halloween-black border-halloween-purple-bright/30">
@@ -194,8 +223,8 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
             {!showConfirmation ? (
               <Button
                 onClick={() => setShowConfirmation(true)}
-                disabled={!selectedMemberId}
-                className="w-full bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
+                disabled={!selectedMemberId || isClaiming}
+                className="w-full bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold disabled:opacity-50"
               >
                 <Crown className="w-4 h-4 mr-2" />
                 Reclamar Presidencia
@@ -209,7 +238,7 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
                   <Button
                     onClick={handleClaimPresidency}
                     disabled={isClaiming}
-                    className="flex-1 bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
+                    className="flex-1 bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold disabled:opacity-50"
                   >
                     {isClaiming ? 'Procesando...' : 'Confirmar'}
                   </Button>
@@ -218,8 +247,9 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
                       setShowConfirmation(false);
                       setSelectedMemberId('');
                     }}
+                    disabled={isClaiming}
                     variant="outline"
-                    className="flex-1 border-halloween-purple/40 text-foreground hover:bg-halloween-purple/20"
+                    className="flex-1 border-halloween-purple/40 text-foreground hover:bg-halloween-purple/20 disabled:opacity-50"
                   >
                     Cancelar
                   </Button>
