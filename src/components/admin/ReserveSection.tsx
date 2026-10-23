@@ -60,7 +60,8 @@ export default function ReserveSection() {
 
       setFormData({ movementType: 'Entrada', amount: '', description: '', responsibleUser: '' });
       setShowAddForm(false);
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error adding reserve movement:', error);
     } finally {

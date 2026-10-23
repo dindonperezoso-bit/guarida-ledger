@@ -98,7 +98,8 @@ export default function TransfersSection() {
         description: '' 
       });
       setShowNewTransferForm(false);
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error creating transfer:', error);
     } finally {

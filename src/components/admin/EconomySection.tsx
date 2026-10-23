@@ -58,7 +58,8 @@ export default function EconomySection() {
 
       setFormData({ tipoMovimiento: 'Aumento', cantidadCambio: '', descripcion: '' });
       setShowAddForm(false);
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error adding economy record:', error);
     } finally {

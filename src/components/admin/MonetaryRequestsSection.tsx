@@ -57,7 +57,8 @@ export default function MonetaryRequestsSection() {
 
       setFormData({ requestedAmount: '', reason: '', requester: '' });
       setShowNewRequestForm(false);
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error creating request:', error);
     } finally {
@@ -73,7 +74,8 @@ export default function MonetaryRequestsSection() {
         approverComments: 'Aprobada por el presidente'
       });
 
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error approving request:', error);
     }
@@ -87,7 +89,8 @@ export default function MonetaryRequestsSection() {
         approverComments: 'Rechazada por el presidente'
       });
 
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error rejecting request:', error);
     }
@@ -113,9 +116,23 @@ export default function MonetaryRequestsSection() {
         status: 'Ejecutada'
       });
 
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error executing emission:', error);
+    }
+  };
+
+  const getStatusIcon = (status?: string) => {
+    switch (status) {
+      case 'Aprobada':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'Rechazada':
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      case 'Ejecutada':
+        return <CheckCircle className="w-4 h-4 text-blue-500" />;
+      default:
+        return <Clock className="w-4 h-4 text-yellow-500" />;
     }
   };
 
@@ -134,73 +151,72 @@ export default function MonetaryRequestsSection() {
 
   return (
     <div className="space-y-6">
-      {/* Requests Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-xl p-8 border border-gray-200"
+        className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40"
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <DollarSign className="w-8 h-8 text-accent-gold" />
+            <DollarSign className="w-8 h-8 text-halloween-orange-light" />
             <div>
-              <h2 className="font-heading text-2xl text-foreground">Solicitudes de Emisión Monetaria</h2>
+              <h2 className="font-heading text-2xl text-halloween-orange-light">Solicitudes Monetarias</h2>
               <p className="font-paragraph text-foreground/60">
-                Gestiona las solicitudes de creación de nuevos Puntos
+                Gestiona solicitudes de emisión monetaria
               </p>
             </div>
           </div>
           <Button
             onClick={() => setShowNewRequestForm(!showNewRequestForm)}
-            className="bg-accent-gold text-dark-night-blue hover:bg-accent-gold/90"
+            className="bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
           >
             {showNewRequestForm ? 'Cancelar' : 'Nueva Solicitud'}
           </Button>
         </div>
 
         {showNewRequestForm && (
-          <div className="mb-6 bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <h3 className="font-heading text-lg text-foreground mb-4">Nueva Solicitud de Emisión</h3>
+          <div className="mb-6 bg-halloween-purple/10 rounded-xl p-6 border border-halloween-purple/40">
+            <h3 className="font-heading text-lg text-halloween-orange-light mb-4">Nueva Solicitud de Emisión</h3>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="amount" className="font-paragraph">Cantidad Solicitada</Label>
+                <Label htmlFor="amount" className="font-paragraph text-foreground">Cantidad Solicitada</Label>
                 <Input
                   id="amount"
                   type="number"
                   value={formData.requestedAmount}
                   onChange={(e) => setFormData({ ...formData, requestedAmount: e.target.value })}
                   placeholder="0"
-                  className="mt-2"
+                  className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                 />
               </div>
 
               <div>
-                <Label htmlFor="requester" className="font-paragraph">Solicitante</Label>
-                <Input
-                  id="requester"
-                  value={formData.requester}
-                  onChange={(e) => setFormData({ ...formData, requester: e.target.value })}
-                  placeholder="Nombre del solicitante"
-                  className="mt-2"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="reason" className="font-paragraph">Motivo</Label>
+                <Label htmlFor="reason" className="font-paragraph text-foreground">Motivo de la Solicitud</Label>
                 <Textarea
                   id="reason"
                   value={formData.reason}
                   onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                   placeholder="Describe el motivo de la solicitud"
-                  className="mt-2"
+                  className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                   rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="requester" className="font-paragraph text-foreground">Solicitante</Label>
+                <Input
+                  id="requester"
+                  value={formData.requester}
+                  onChange={(e) => setFormData({ ...formData, requester: e.target.value })}
+                  placeholder="Nombre del solicitante"
+                  className="mt-2 bg-halloween-purple/20 border-halloween-purple/40 text-foreground placeholder:text-foreground/40"
                 />
               </div>
 
               <Button
                 onClick={handleCreateRequest}
                 disabled={isSubmitting || !formData.requestedAmount || !formData.reason || !formData.requester}
-                className="w-full bg-accent-gold text-dark-night-blue hover:bg-accent-gold/90"
+                className="w-full bg-halloween-orange text-halloween-black hover:bg-halloween-orange-light font-bold"
               >
                 {isSubmitting ? 'Creando...' : 'Crear Solicitud'}
               </Button>
@@ -213,36 +229,39 @@ export default function MonetaryRequestsSection() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="font-heading text-left py-4 px-4">Fecha</th>
-                    <th className="font-heading text-left py-4 px-4">Solicitante</th>
-                    <th className="font-heading text-right py-4 px-4">Cantidad</th>
-                    <th className="font-heading text-left py-4 px-4">Motivo</th>
-                    <th className="font-heading text-center py-4 px-4">Estado</th>
-                    <th className="font-heading text-center py-4 px-4">Acciones</th>
+                  <tr className="border-b border-halloween-purple/40">
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Solicitante</th>
+                    <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Cantidad</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Motivo</th>
+                    <th className="font-heading text-center py-4 px-4 text-halloween-purple-bright">Estado</th>
+                    <th className="font-heading text-center py-4 px-4 text-halloween-purple-bright">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {requests.map((request) => (
-                    <tr key={request._id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                    <tr key={request._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {request.requestDate 
                           ? new Date(request.requestDate).toLocaleDateString('es-ES')
                           : 'N/A'}
                       </td>
-                      <td className="font-paragraph py-4 px-4">
+                      <td className="font-paragraph py-4 px-4 text-foreground">
                         {request.requester}
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-right font-bold text-accent-gold">
+                      <td className="font-paragraph py-4 px-4 text-right font-bold text-halloween-orange-light">
                         {(request.requestedAmount || 0).toLocaleString()} P
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground/70">
                         {request.reason}
                       </td>
                       <td className="font-paragraph py-4 px-4 text-center">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs ${getStatusColor(request.status)}`}>
-                          {request.status}
-                        </span>
+                        <div className="flex items-center justify-center gap-2">
+                          {getStatusIcon(request.status)}
+                          <span className={`inline-block px-3 py-1 rounded-full text-xs ${getStatusColor(request.status)}`}>
+                            {request.status}
+                          </span>
+                        </div>
                       </td>
                       <td className="font-paragraph py-4 px-4">
                         <div className="flex gap-2 justify-center">
@@ -268,7 +287,7 @@ export default function MonetaryRequestsSection() {
                             <Button
                               size="sm"
                               onClick={() => handleExecuteEmission(request)}
-                              className="bg-accent-gold text-dark-night-blue hover:bg-accent-gold/90"
+                              className="bg-blue-500 text-white hover:bg-blue-600"
                             >
                               Ejecutar
                             </Button>
@@ -289,46 +308,43 @@ export default function MonetaryRequestsSection() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white rounded-xl p-8 border border-gray-200"
+        className="bg-halloween-purple/20 rounded-xl p-8 border border-halloween-purple/40"
       >
-        <h3 className="font-heading text-xl text-foreground mb-6">Historial de Emisiones Ejecutadas</h3>
-        
+        <h3 className="font-heading text-2xl text-halloween-orange-light mb-6">Historial de Emisiones</h3>
         <div className="min-h-[200px]">
-          {isLoading ? null : emissions.length === 0 ? (
-            <p className="font-paragraph text-foreground/60 text-center py-8">
-              No hay emisiones ejecutadas
-            </p>
-          ) : (
+          {isLoading ? null : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="font-heading text-left py-4 px-4">ID Transacción</th>
-                    <th className="font-heading text-left py-4 px-4">Fecha</th>
-                    <th className="font-heading text-right py-4 px-4">Cantidad</th>
-                    <th className="font-heading text-left py-4 px-4">Motivo</th>
-                    <th className="font-heading text-left py-4 px-4">Autorizado Por</th>
+                  <tr className="border-b border-halloween-purple/40">
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">ID Transacción</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha</th>
+                    <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Cantidad</th>
+                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Motivo</th>
+                    <th className="font-heading text-center py-4 px-4 text-halloween-purple-bright">Estado</th>
                   </tr>
                 </thead>
                 <tbody>
                   {emissions.map((emission) => (
-                    <tr key={emission._id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="font-paragraph py-4 px-4 text-sm font-mono">
+                    <tr key={emission._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {emission.transactionId}
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
                         {emission.executionDate 
                           ? new Date(emission.executionDate).toLocaleDateString('es-ES')
                           : 'N/A'}
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-right font-bold text-accent-gold">
+                      <td className="font-paragraph py-4 px-4 text-right font-bold text-halloween-orange-light">
                         {(emission.amountEmitted || 0).toLocaleString()} P
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
+                      <td className="font-paragraph py-4 px-4 text-sm text-foreground/70">
                         {emission.reason}
                       </td>
-                      <td className="font-paragraph py-4 px-4 text-sm">
-                        {emission.approvingAuthorities}
+                      <td className="font-paragraph py-4 px-4 text-center">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-700">
+                          {emission.status}
+                        </span>
                       </td>
                     </tr>
                   ))}

@@ -56,7 +56,8 @@ export default function ProjectsSection() {
 
       setFormData({ projectName: '', description: '', requestedBudget: '', justification: '', requester: '' });
       setShowNewProjectForm(false);
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error creating project:', error);
     } finally {
@@ -73,7 +74,8 @@ export default function ProjectsSection() {
         approvalDate: new Date().toISOString()
       });
 
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error approving project:', error);
     }
@@ -86,7 +88,8 @@ export default function ProjectsSection() {
         approvalStatus: 'Rechazado'
       });
 
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error rejecting project:', error);
     }
@@ -110,7 +113,8 @@ export default function ProjectsSection() {
       });
 
       setPaymentForm(null);
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error registering payment:', error);
     }

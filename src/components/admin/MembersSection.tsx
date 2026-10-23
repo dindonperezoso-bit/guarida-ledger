@@ -52,7 +52,8 @@ export default function MembersSection() {
 
       setEditingMember(null);
       setEditPoints('');
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error updating member points:', error);
     }
@@ -91,7 +92,8 @@ export default function MembersSection() {
       setSelectedMemberId('');
       setPointsChange('');
       setPointsReason('');
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error updating points:', error);
     }
@@ -105,7 +107,8 @@ export default function MembersSection() {
         lastActivityDate: new Date().toISOString()
       });
 
-      await loadData();
+      // Reload immediately without setTimeout to prevent UI freeze
+      loadData();
     } catch (error) {
       console.error('Error updating member status:', error);
     }
