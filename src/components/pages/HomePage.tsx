@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BaseCrudService } from '@/integrations';
 import { EconomaGeneral, ConfiguracindelSistema } from '@/entities';
 import { TrendingUp, TrendingDown, AlertTriangle, CheckCircle, ArrowRight, Shield, Activity, Database, Lock } from 'lucide-react';
@@ -7,19 +7,27 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Image } from '@/components/ui/image';
+import { useAuthStore } from '@/lib/auth-store';
 
 const MINIMUM_ECONOMY = 200000000;
 const CRITICAL_LEVEL = 60000000;
 
 export default function HomePage() {
+  const navigate = useNavigate();
+  const { isAuthenticated: isAuthStoreAuthenticated, authUser } = useAuthStore();
   const [economyData, setEconomyData] = useState<EconomaGeneral | null>(null);
   const [config, setConfig] = useState<ConfiguracindelSistema | null>(null);
   const [history, setHistory] = useState<EconomaGeneral[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!isAuthStoreAuthenticated) {
+      navigate('/login');
+      return;
+    }
     loadData();
-  }, []);
+  }, [isAuthStoreAuthenticated, navigate]);
 
   const loadData = async () => {
     try {

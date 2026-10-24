@@ -87,10 +87,8 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
       setShowConfirmation(false);
       setSelectedMemberId('');
       
-      // Call onConfigUpdate after a brief delay to ensure UI updates
-      setTimeout(() => {
-        onConfigUpdate();
-      }, 100);
+      // Call onConfigUpdate immediately
+      onConfigUpdate();
     } catch (error) {
       console.error('Error claiming presidency:', error);
       setMessage({ type: 'error', text: 'Error al reclamar la presidencia' });
@@ -125,10 +123,8 @@ export default function PresidencySection({ config, onConfigUpdate }: Presidency
 
       setMessage({ type: 'success', text: 'Presidencia liberada exitosamente' });
       
-      // Call onConfigUpdate after a brief delay to ensure UI updates
-      setTimeout(() => {
-        onConfigUpdate();
-      }, 100);
+      // Call onConfigUpdate immediately
+      onConfigUpdate();
     } catch (error) {
       console.error('Error releasing presidency:', error);
       setMessage({ type: 'error', text: 'Error al liberar la presidencia' });

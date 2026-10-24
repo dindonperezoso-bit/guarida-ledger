@@ -155,52 +155,58 @@ export default function EconomySection() {
           </div>
         )}
 
-        <div className="min-h-[300px]">
-          {isLoading ? null : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-halloween-purple/40">
-                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha</th>
-                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Tipo</th>
-                    <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Descripción</th>
-                    <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Cambio</th>
-                    <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {economyData.map((item) => (
-                    <tr key={item._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
-                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
-                        {item.fechaHora ? new Date(item.fechaHora).toLocaleDateString('es-ES') : 'N/A'}
-                      </td>
-                      <td className="font-paragraph py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          {item.tipoMovimiento === 'Aumento' ? (
-                            <TrendingUp className="w-4 h-4 text-green-400" />
-                          ) : (
-                            <TrendingDown className="w-4 h-4 text-red-400" />
-                          )}
-                          <span className="text-sm text-foreground">{item.tipoMovimiento}</span>
-                        </div>
-                      </td>
-                      <td className="font-paragraph py-4 px-4 text-sm text-foreground">
-                        {item.descripcion}
-                      </td>
-                      <td className={`font-paragraph py-4 px-4 text-right font-bold ${
-                        item.tipoMovimiento === 'Aumento' ? 'text-green-400' : 'text-red-400'
-                      }`}>
-                        {item.tipoMovimiento === 'Aumento' ? '+' : '-'}
-                        {Math.abs(item.cantidadCambio || 0).toLocaleString()} P
-                      </td>
-                      <td className="font-paragraph py-4 px-4 text-right font-bold text-halloween-orange-light">
-                        {(item.montoTotal || 0).toLocaleString()} P
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        <div className="min-h-[300px] overflow-x-auto">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-foreground/60 font-paragraph">Cargando datos...</div>
             </div>
+          ) : economyData.length === 0 ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-foreground/60 font-paragraph">No hay movimientos registrados</div>
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-halloween-purple/40">
+                  <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Fecha</th>
+                  <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Tipo</th>
+                  <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Descripción</th>
+                  <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Cambio</th>
+                  <th className="font-heading text-right py-4 px-4 text-halloween-purple-bright">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {economyData.map((item) => (
+                  <tr key={item._id} className="border-b border-halloween-purple/20 hover:bg-halloween-purple/10">
+                    <td className="font-paragraph py-4 px-4 text-sm text-foreground">
+                      {item.fechaHora ? new Date(item.fechaHora).toLocaleDateString('es-ES') : 'N/A'}
+                    </td>
+                    <td className="font-paragraph py-4 px-4">
+                      <div className="flex items-center gap-2">
+                        {item.tipoMovimiento === 'Aumento' ? (
+                          <TrendingUp className="w-4 h-4 text-green-400" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-red-400" />
+                        )}
+                        <span className="text-sm text-foreground">{item.tipoMovimiento}</span>
+                      </div>
+                    </td>
+                    <td className="font-paragraph py-4 px-4 text-sm text-foreground">
+                      {item.descripcion}
+                    </td>
+                    <td className={`font-paragraph py-4 px-4 text-right font-bold ${
+                      item.tipoMovimiento === 'Aumento' ? 'text-green-400' : 'text-red-400'
+                    }`}>
+                      {item.tipoMovimiento === 'Aumento' ? '+' : '-'}
+                      {Math.abs(item.cantidadCambio || 0).toLocaleString()} P
+                    </td>
+                    <td className="font-paragraph py-4 px-4 text-right font-bold text-halloween-orange-light">
+                      {(item.montoTotal || 0).toLocaleString()} P
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </motion.div>

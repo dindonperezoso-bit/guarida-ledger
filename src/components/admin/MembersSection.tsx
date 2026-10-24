@@ -212,10 +212,17 @@ export default function MembersSection() {
           </Button>
         </div>
 
-        <div className="min-h-[300px]">
-          {isLoading ? null : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
+        <div className="min-h-[300px] overflow-x-auto">
+          {isLoading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-foreground/60 font-paragraph">Cargando miembros...</div>
+            </div>
+          ) : members.length === 0 ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-foreground/60 font-paragraph">No hay miembros registrados</div>
+            </div>
+          ) : (
+            <table className="w-full">
                 <thead>
                   <tr className="border-b border-halloween-purple/40">
                     <th className="font-heading text-left py-4 px-4 text-halloween-purple-bright">Nombre</th>
@@ -303,8 +310,7 @@ export default function MembersSection() {
                   ))}
                 </tbody>
               </table>
-            </div>
-          )}
+            )}
         </div>
       </motion.div>
     </div>

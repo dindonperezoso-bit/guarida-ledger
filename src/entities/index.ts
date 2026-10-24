@@ -85,6 +85,29 @@ export interface ConfiguracindelSistema {
 
 
 /**
+ * Collection ID: credenciales
+ * Interface for UserCredentials
+ */
+export interface UserCredentials {
+  _id: string;
+  _createdDate?: Date;
+  _updatedDate?: Date;
+  /** @wixFieldType text */
+  username?: string;
+  /** @wixFieldType text */
+  passwordHash?: string;
+  /** @wixFieldType text */
+  userRole?: string;
+  /** @wixFieldType text */
+  memberProfileId?: string;
+  /** @wixFieldType boolean */
+  isActive?: boolean;
+  /** @wixFieldType datetime */
+  lastLoginDate?: Date | string;
+}
+
+
+/**
  * Collection ID: economia
  * Interface for EconomaGeneral
  */

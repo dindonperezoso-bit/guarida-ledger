@@ -10,14 +10,25 @@ import MiembrosPage from '@/components/pages/MiembrosPage';
 import AdminPage from '@/components/pages/AdminPage';
 import ProfilePage from '@/components/pages/ProfilePage';
 import TransferenciasPage from '@/components/pages/TransferenciasPage';
+import LoginPage from '@/components/pages/LoginPage';
 import { ensureSystemInitialized } from '@/lib/data-initialization';
+import { initializeCredentials } from '@/lib/initialize-credentials';
+import { useAuthStore } from '@/lib/auth-store';
 
 // Layout component that includes ScrollToTop and system initialization
 function Layout() {
+  const { loadAuthUser } = useAuthStore();
+
   useEffect(() => {
     // Initialize system on app load
     ensureSystemInitialized().catch(err => console.error('Failed to initialize system:', err));
-  }, []);
+    
+    // Initialize credentials
+    initializeCredentials().catch(err => console.error('Failed to initialize credentials:', err));
+    
+    // Load auth user from storage
+    loadAuthUser();
+  }, [loadAuthUser]);
 
   return (
     <>
@@ -33,6 +44,13 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+        routeMetadata: {
+          pageIdentifier: 'login',
+        },
+      },
       {
         index: true,
         element: <HomePage />,
