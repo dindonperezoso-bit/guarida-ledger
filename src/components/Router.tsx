@@ -1,7 +1,7 @@
 import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import { MemberProtectedRoute } from '@/components/ui/member-protected-route';
 import HomePage from '@/components/pages/HomePage';
@@ -18,13 +18,20 @@ import { useAuthStore } from '@/lib/auth-store';
 // Layout component that includes ScrollToTop and system initialization
 function Layout() {
   const { loadAuthUser } = useAuthStore();
+  const initRef = useRef(false);
 
   useEffect(() => {
-    // Initialize system on app load
-    ensureSystemInitialized().catch(err => console.error('Failed to initialize system:', err));
-    
-    // Initialize credentials
-    initializeCredentials().catch(err => console.error('Failed to initialize credentials:', err));
+    // Only initialize once to prevent race conditions
+    if (initRef.current) {
+      return;
+    }
+    initRef.current = true;
+
+    // Initialize system and credentials in parallel (non-blocking)
+    Promise.all([
+      ensureSystemInitialized(),
+      initializeCredentials()
+    ]).catch(err => console.error('Failed to initialize system:', err));
     
     // Load auth user from storage
     loadAuthUser();

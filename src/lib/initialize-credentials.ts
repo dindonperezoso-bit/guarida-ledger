@@ -107,5 +107,6 @@ export async function initializeCredentials(): Promise<void> {
     console.log('Credentials initialized successfully');
   } catch (error) {
     console.error('Error initializing credentials:', error);
+    // Don't throw - allow app to continue even if initialization fails
   }
 }

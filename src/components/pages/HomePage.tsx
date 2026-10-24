@@ -14,20 +14,26 @@ const CRITICAL_LEVEL = 60000000;
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { isAuthenticated: isAuthStoreAuthenticated, authUser } = useAuthStore();
+  const { isAuthenticated: isAuthStoreAuthenticated, authUser, isLoading: authLoading } = useAuthStore();
   const [economyData, setEconomyData] = useState<EconomaGeneral | null>(null);
   const [config, setConfig] = useState<ConfiguracindelSistema | null>(null);
   const [history, setHistory] = useState<EconomaGeneral[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Redirect to login if not authenticated
+    // Wait for auth to finish loading before checking authentication
+    if (authLoading) {
+      return;
+    }
+    
+    // Redirect to login if not authenticated (only after auth check is complete)
     if (!isAuthStoreAuthenticated) {
       navigate('/login');
       return;
     }
+    
     loadData();
-  }, [isAuthStoreAuthenticated, navigate]);
+  }, [isAuthStoreAuthenticated, authLoading, navigate]);
 
   const loadData = async () => {
     try {

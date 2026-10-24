@@ -108,5 +108,6 @@ export async function ensureSystemInitialized(): Promise<void> {
     ]);
   } catch (error) {
     console.error('Error ensuring system initialization:', error);
+    // Don't throw - allow app to continue even if initialization fails
   }
 }

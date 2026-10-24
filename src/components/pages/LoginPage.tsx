@@ -20,6 +20,12 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent multiple simultaneous submissions
+    if (isLoading) {
+      return;
+    }
+    
     setError('');
     setIsLoading(true);
 
@@ -35,8 +41,10 @@ export default function LoginPage() {
       // Store auth data
       setAuthUser(user, rememberMe);
 
-      // Redirect to home
-      navigate('/');
+      // Redirect to home after a brief delay to ensure state is updated
+      setTimeout(() => {
+        navigate('/');
+      }, 100);
     } catch (err) {
       console.error('Login error:', err);
       setError('Error al iniciar sesión. Intenta de nuevo.');

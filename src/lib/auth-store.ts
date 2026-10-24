@@ -23,7 +23,7 @@ export const useAuthStore = create<AuthStore>()(
     (set) => ({
       authUser: null,
       isAuthenticated: false,
-      isLoading: false,
+      isLoading: true,
 
       setAuthUser: (user: AuthUser, rememberMe: boolean) => {
         set({

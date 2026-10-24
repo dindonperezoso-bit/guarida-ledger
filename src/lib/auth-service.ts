@@ -39,8 +39,19 @@ export interface UserCredentials {
  */
 export async function authenticateUser(username: string, password: string): Promise<UserCredentials | null> {
   try {
+    if (!username || !password) {
+      console.error('Username or password is empty');
+      return null;
+    }
+
     // Get all credentials and find matching username
     const result = await BaseCrudService.getAll<any>('credenciales', {}, { limit: 100 });
+    
+    if (!result || !result.items) {
+      console.error('Failed to fetch credentials');
+      return null;
+    }
+
     const credential = result.items.find((c: any) => c.username?.toLowerCase() === username.toLowerCase());
 
     if (!credential || !credential.isActive) {
@@ -53,15 +64,13 @@ export async function authenticateUser(username: string, password: string): Prom
       return null;
     }
 
-    // Update last login date
-    try {
-      await BaseCrudService.update('credenciales', {
-        _id: credential._id,
-        lastLoginDate: new Date().toISOString()
-      });
-    } catch (error) {
+    // Update last login date (non-blocking)
+    BaseCrudService.update('credenciales', {
+      _id: credential._id,
+      lastLoginDate: new Date().toISOString()
+    }).catch(error => {
       console.error('Error updating last login date:', error);
-    }
+    });
 
     return credential as UserCredentials;
   } catch (error) {
