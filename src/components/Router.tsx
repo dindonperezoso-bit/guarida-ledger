@@ -11,6 +11,7 @@ import AdminPage from '@/components/pages/AdminPage';
 import ProfilePage from '@/components/pages/ProfilePage';
 import TransferenciasPage from '@/components/pages/TransferenciasPage';
 import LoginPage from '@/components/pages/LoginPage';
+import DiagnosticsPage from '@/components/pages/DiagnosticsPage';
 import { ensureSystemInitialized } from '@/lib/data-initialization';
 import { initializeCredentials } from '@/lib/initialize-credentials';
 import { useAuthStore } from '@/lib/auth-store';
@@ -56,6 +57,13 @@ const router = createBrowserRouter([
         element: <LoginPage />,
         routeMetadata: {
           pageIdentifier: 'login',
+        },
+      },
+      {
+        path: "diagnostics",
+        element: <DiagnosticsPage />,
+        routeMetadata: {
+          pageIdentifier: 'diagnostics',
         },
       },
       {

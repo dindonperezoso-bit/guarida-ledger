@@ -8,9 +8,22 @@ export async function initializeCredentials(): Promise<void> {
   try {
     // Check if credentials already exist
     const credentialsResult = await BaseCrudService.getAll<any>('credenciales', {}, { limit: 100 });
-    if (credentialsResult.items.length > 0) {
-      console.log('Credentials already initialized');
+    
+    // Define the required users
+    const requiredUsers = ['IKER', 'CRISTIAN', 'JORDAN', 'IAN'];
+    const existingUsernames = credentialsResult.items.map((c: any) => c.username?.toUpperCase()).filter(Boolean);
+    
+    // Check if all required users exist
+    const allUsersExist = requiredUsers.every(user => existingUsernames.includes(user));
+    
+    if (allUsersExist && credentialsResult.items.length > 0) {
+      console.log('Credentials already initialized with all required users');
       return;
+    }
+    
+    // If some users are missing or credentials are incomplete, log it
+    if (credentialsResult.items.length > 0) {
+      console.log('Found existing credentials but missing required users. Existing:', existingUsernames, 'Required:', requiredUsers);
     }
 
     // Check if roles exist
@@ -67,6 +80,14 @@ export async function initializeCredentials(): Promise<void> {
 
     // Create credentials for each user
     for (const user of users) {
+      // Check if credential already exists for this user
+      const existingCredential = credentialsResult.items.find((c: any) => c.username?.toUpperCase() === user.username.toUpperCase());
+      
+      if (existingCredential) {
+        console.log(`Credential already exists for user: ${user.username}`);
+        continue;
+      }
+      
       // Check if member exists
       let member = membersResult.items.find((m: any) => m.memberName === user.memberName);
       
@@ -86,6 +107,7 @@ export async function initializeCredentials(): Promise<void> {
         
         await BaseCrudService.create('miembros', memberData);
         member = memberData;
+        console.log(`Created member profile for: ${user.memberName}`);
       }
 
       // Create credential
@@ -102,6 +124,7 @@ export async function initializeCredentials(): Promise<void> {
       };
       
       await BaseCrudService.create('credenciales', credentialData);
+      console.log(`Created credential for user: ${user.username} with role: ${user.role}`);
     }
 
     console.log('Credentials initialized successfully');

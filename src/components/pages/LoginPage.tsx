@@ -30,13 +30,17 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+      console.log(`[LOGIN] Attempting login with username: ${username}`);
       const user = await authenticateUser(username, password);
       
       if (!user) {
+        console.error('[LOGIN] Authentication failed - user is null');
         setError('Usuario o contraseña incorrectos');
         setIsLoading(false);
         return;
       }
+
+      console.log(`[LOGIN] Authentication successful for user: ${user.username}`);
 
       // Store auth data
       setAuthUser(user, rememberMe);
@@ -46,7 +50,7 @@ export default function LoginPage() {
         navigate('/');
       }, 100);
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('[LOGIN] Login error:', err);
       setError('Error al iniciar sesión. Intenta de nuevo.');
       setIsLoading(false);
     }
