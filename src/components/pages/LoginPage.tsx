@@ -36,40 +36,46 @@ export default function LoginPage() {
     }
     
     setError('');
+    setIsLoading(true);
 
-    const result = await loginControllerRef.current(
-      username,
-      password,
-      {
-        onLoading: (loading) => {
-          setIsLoading(loading);
-        },
-        onSuccess: async ({ user, profile }) => {
-          console.log(`[LOGIN_PAGE] Login successful for ${user.username}`);
-          
-          // Store auth data with user and profile info
-          setAuthUser({
-            _id: user._id,
-            username: user.username,
-            userRole: user.userRole,
-            memberProfileId: user.memberProfileId,
-            isActive: user.isActive
-          }, rememberMe);
+    try {
+      const result = await loginControllerRef.current(
+        username,
+        password,
+        {
+          onSuccess: async ({ user, profile }) => {
+            console.log(`[LOGIN_PAGE] Login successful for ${user.username}`);
+            
+            // Store auth data with user and profile info
+            setAuthUser({
+              _id: user._id,
+              username: user.username,
+              userRole: user.userRole,
+              memberProfileId: user.memberProfileId,
+              isActive: user.isActive
+            }, rememberMe);
 
-          // Redirect to home after a brief delay to ensure state is updated
-          setTimeout(() => {
-            navigate('/');
-          }, 100);
-        },
-        onError: (err) => {
-          console.error('[LOGIN_PAGE] Login error:', err);
-          setError(err.message || 'Error al iniciar sesión. Intenta de nuevo.');
+            // Redirect to home after a brief delay to ensure state is updated
+            setTimeout(() => {
+              navigate('/');
+            }, 100);
+          },
+          onError: (err) => {
+            console.error('[LOGIN_PAGE] Login error:', err);
+            setError(err.message || 'Error al iniciar sesión. Intenta de nuevo.');
+            setIsLoading(false);
+          }
         }
-      }
-    );
+      );
 
-    if (!result.success) {
-      setError(result.error || 'Error al iniciar sesión. Intenta de nuevo.');
+      if (!result.success) {
+        setError(result.error || 'Error al iniciar sesión. Intenta de nuevo.');
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error('[LOGIN_PAGE] Unexpected error:', err);
+      setError('Error inesperado. Intenta de nuevo.');
+      setIsLoading(false);
     }
   };
 
