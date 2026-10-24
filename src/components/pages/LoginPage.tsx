@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, User, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Lock, User, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { authenticateUser } from '@/lib/auth-service';
 import { useAuthStore } from '@/lib/auth-store';
+import { createLoginController } from '@/lib/login-controller';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -17,42 +17,59 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
+  const loginControllerRef = useRef(createLoginController());
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      setIsLoading(false);
+    };
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Prevent multiple simultaneous submissions
     if (isLoading) {
+      console.warn('[LOGIN_PAGE] Login already in progress');
       return;
     }
     
     setError('');
-    setIsLoading(true);
 
-    try {
-      console.log(`[LOGIN] Attempting login with username: ${username}`);
-      const user = await authenticateUser(username, password);
-      
-      if (!user) {
-        console.error('[LOGIN] Authentication failed - user is null');
-        setError('Usuario o contraseña incorrectos');
-        setIsLoading(false);
-        return;
+    const result = await loginControllerRef.current(
+      username,
+      password,
+      {
+        onLoading: (loading) => {
+          setIsLoading(loading);
+        },
+        onSuccess: async ({ user, profile }) => {
+          console.log(`[LOGIN_PAGE] Login successful for ${user.username}`);
+          
+          // Store auth data with user and profile info
+          setAuthUser({
+            _id: user._id,
+            username: user.username,
+            userRole: user.userRole,
+            memberProfileId: user.memberProfileId,
+            isActive: user.isActive
+          }, rememberMe);
+
+          // Redirect to home after a brief delay to ensure state is updated
+          setTimeout(() => {
+            navigate('/');
+          }, 100);
+        },
+        onError: (err) => {
+          console.error('[LOGIN_PAGE] Login error:', err);
+          setError(err.message || 'Error al iniciar sesión. Intenta de nuevo.');
+        }
       }
+    );
 
-      console.log(`[LOGIN] Authentication successful for user: ${user.username}`);
-
-      // Store auth data
-      setAuthUser(user, rememberMe);
-
-      // Redirect to home after a brief delay to ensure state is updated
-      setTimeout(() => {
-        navigate('/');
-      }, 100);
-    } catch (err) {
-      console.error('[LOGIN] Login error:', err);
-      setError('Error al iniciar sesión. Intenta de nuevo.');
-      setIsLoading(false);
+    if (!result.success) {
+      setError(result.error || 'Error al iniciar sesión. Intenta de nuevo.');
     }
   };
 
