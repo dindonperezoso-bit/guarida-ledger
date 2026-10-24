@@ -8,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useAuthStore } from '@/lib/auth-store';
 import { createLoginController } from '@/lib/login-controller';
-import { useFormLoginHandler } from '@/hooks/useFormLoginHandler';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const loginControllerRef = useRef(createLoginController());
-  const formRef = useRef<HTMLFormElement>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -28,7 +26,9 @@ export default function LoginPage() {
     };
   }, []);
 
-  const handleLoginSubmit = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     // Prevent multiple simultaneous submissions
     if (isLoading) {
       console.warn('[LOGIN_PAGE] Login already in progress');
@@ -36,8 +36,6 @@ export default function LoginPage() {
     }
     
     setError('');
-
-    setIsLoading(true);
 
     const result = await loginControllerRef.current(
       username,
@@ -73,17 +71,7 @@ export default function LoginPage() {
     if (!result.success) {
       setError(result.error || 'Error al iniciar sesión. Intenta de nuevo.');
     }
-
-    setIsLoading(false);
   };
-
-  // Usar el hook para manejar eventos del formulario
-  useFormLoginHandler(formRef, {
-    onSubmit: handleLoginSubmit,
-    onError: (err) => {
-      setError(err.message || 'Error al iniciar sesión. Intenta de nuevo.');
-    },
-  });
 
   return (
     <div className="min-h-screen bg-halloween-black flex items-center justify-center px-4 py-12">
