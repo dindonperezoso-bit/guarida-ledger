@@ -21,19 +21,14 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Wait for auth to finish loading before checking authentication
+    // Wait for auth to finish loading
     if (authLoading) {
       return;
     }
     
-    // Redirect to login if not authenticated (only after auth check is complete)
-    if (!isAuthStoreAuthenticated) {
-      navigate('/login');
-      return;
-    }
-    
+    // Load data regardless of authentication - HomePage is public
     loadData();
-  }, [isAuthStoreAuthenticated, authLoading, navigate]);
+  }, [authLoading]);
 
   const loadData = async () => {
     try {

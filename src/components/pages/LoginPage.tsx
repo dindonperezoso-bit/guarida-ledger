@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock, User, AlertTriangle } from 'lucide-react';
+import { Lock, User, AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,6 +14,7 @@ export default function LoginPage() {
   const { setAuthUser } = useAuthStore();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -151,16 +152,27 @@ export default function LoginPage() {
                 <Lock className="w-4 h-4 text-halloween-orange-light" />
                 Contraseña
               </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Ingresa tu contraseña"
-                className="bg-halloween-black/50 border-halloween-purple-bright/30 text-foreground placeholder:text-foreground/40 focus:border-halloween-orange-light"
-                disabled={isLoading}
-                autoComplete="current-password"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Ingresa tu contraseña"
+                  className="bg-halloween-black/50 border-halloween-purple-bright/30 text-foreground placeholder:text-foreground/40 focus:border-halloween-orange-light pr-10"
+                  disabled={isLoading}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/60 hover:text-foreground transition-colors"
+                  disabled={isLoading}
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
 
             {/* Remember Me */}
@@ -198,7 +210,7 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          {/* Demo Credentials Info */}
+           {/* Demo Credentials Info */}
           <div className="mt-8 pt-6 border-t border-halloween-purple/30">
             <p className="font-paragraph text-xs text-halloween-purple-bright uppercase tracking-wider mb-3 font-bold">
               Cuentas de Demostración
