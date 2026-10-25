@@ -27,6 +27,14 @@ export default function LoginPage() {
     };
   }, []);
 
+  // Handle Enter key in password field
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !isLoading && username && password) {
+      e.preventDefault();
+      handleLogin({ preventDefault: () => {} } as React.FormEvent);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -40,37 +48,32 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+      // Call login controller WITHOUT callbacks - handle result directly
       const result = await loginControllerRef.current(
         username,
         password,
-        {
-          onSuccess: async ({ user, profile }) => {
-            console.log(`[LOGIN_PAGE] Login successful for ${user.username}`);
-            
-            // Store auth data with user and profile info
-            setAuthUser({
-              _id: user._id,
-              username: user.username,
-              userRole: user.userRole,
-              memberProfileId: user.memberProfileId,
-              isActive: user.isActive
-            }, rememberMe);
-
-            // Reset loading state before navigation
-            setIsLoading(false);
-            
-            // Redirect to home immediately
-            navigate('/');
-          },
-          onError: (err) => {
-            console.error('[LOGIN_PAGE] Login error:', err);
-            setError(err.message || 'Error al iniciar sesión. Intenta de nuevo.');
-            setIsLoading(false);
-          }
-        }
+        {} // No callbacks - we handle everything here
       );
 
-      if (!result.success) {
+      if (result.success && result.user && result.profile) {
+        console.log(`[LOGIN_PAGE] Login successful for ${result.user.username}`);
+        
+        // Store auth data with user and profile info
+        setAuthUser({
+          _id: result.user._id,
+          username: result.user.username,
+          userRole: result.user.userRole,
+          memberProfileId: result.user.memberProfileId,
+          isActive: result.user.isActive
+        }, rememberMe);
+
+        // Reset loading state BEFORE navigation
+        setIsLoading(false);
+        
+        // Redirect to home immediately
+        navigate('/');
+      } else {
+        // Handle error
         setError(result.error || 'Error al iniciar sesión. Intenta de nuevo.');
         setIsLoading(false);
       }
@@ -158,6 +161,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   placeholder="Ingresa tu contraseña"
                   className="bg-halloween-black/50 border-halloween-purple-bright/30 text-foreground placeholder:text-foreground/40 focus:border-halloween-orange-light pr-10"
                   disabled={isLoading}

@@ -38,8 +38,6 @@ export function createLoginController() {
     password: string,
     callbacks: LoginCallbacks = {}
   ): Promise<LoginResult> {
-    const { onSuccess, onError, onLoading } = callbacks;
-
     // Prevent concurrent login attempts
     if (isProcessing) {
       console.warn('[LOGIN] Login already in progress, ignoring duplicate request');
@@ -50,7 +48,6 @@ export function createLoginController() {
     }
 
     isProcessing = true;
-    onLoading?.(true);
 
     try {
       // Validate inputs
@@ -80,22 +77,11 @@ export function createLoginController() {
 
       console.log(`[LOGIN] Step 2 Complete: Profile loaded - ${profile.memberName}`);
 
-      // Step 3: Update last activity date
+      // Step 3: Update last activity date (non-blocking)
       console.log('[LOGIN] Step 3: Updating user activity...');
-      await updateUserActivity(profile._id);
-
-      console.log('[LOGIN] Step 3 Complete: Activity updated');
-
-      // Step 4: Call success callback
-      console.log('[LOGIN] Step 4: Executing success callback...');
-      if (onSuccess) {
-        try {
-          await onSuccess({ user, profile });
-        } catch (callbackError) {
-          console.error('[LOGIN] Error in success callback:', callbackError);
-          // Don't fail the login if callback has issues
-        }
-      }
+      updateUserActivity(profile._id).catch(err => {
+        console.error('[LOGIN] Non-critical error updating activity:', err);
+      });
 
       console.log('[LOGIN] Authentication flow completed successfully');
 
@@ -108,12 +94,6 @@ export function createLoginController() {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       console.error('[LOGIN] Authentication failed:', errorMessage);
-      
-      try {
-        onError?.(error instanceof Error ? error : new Error(errorMessage));
-      } catch (callbackError) {
-        console.error('[LOGIN] Error in error callback:', callbackError);
-      }
 
       return {
         success: false,
@@ -122,11 +102,6 @@ export function createLoginController() {
 
     } finally {
       isProcessing = false;
-      try {
-        onLoading?.(false);
-      } catch (callbackError) {
-        console.error('[LOGIN] Error in loading callback:', callbackError);
-      }
     }
   };
 }
