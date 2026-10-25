@@ -55,10 +55,11 @@ export default function LoginPage() {
               isActive: user.isActive
             }, rememberMe);
 
-            // Redirect to home after a brief delay to ensure state is updated
-            setTimeout(() => {
-              navigate('/');
-            }, 100);
+            // Reset loading state before navigation
+            setIsLoading(false);
+            
+            // Redirect to home immediately
+            navigate('/');
           },
           onError: (err) => {
             console.error('[LOGIN_PAGE] Login error:', err);

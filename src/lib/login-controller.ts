@@ -88,7 +88,14 @@ export function createLoginController() {
 
       // Step 4: Call success callback
       console.log('[LOGIN] Step 4: Executing success callback...');
-      await onSuccess?.({ user, profile });
+      if (onSuccess) {
+        try {
+          await onSuccess({ user, profile });
+        } catch (callbackError) {
+          console.error('[LOGIN] Error in success callback:', callbackError);
+          // Don't fail the login if callback has issues
+        }
+      }
 
       console.log('[LOGIN] Authentication flow completed successfully');
 
@@ -102,7 +109,11 @@ export function createLoginController() {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       console.error('[LOGIN] Authentication failed:', errorMessage);
       
-      onError?.(error instanceof Error ? error : new Error(errorMessage));
+      try {
+        onError?.(error instanceof Error ? error : new Error(errorMessage));
+      } catch (callbackError) {
+        console.error('[LOGIN] Error in error callback:', callbackError);
+      }
 
       return {
         success: false,
@@ -111,7 +122,11 @@ export function createLoginController() {
 
     } finally {
       isProcessing = false;
-      onLoading?.(false);
+      try {
+        onLoading?.(false);
+      } catch (callbackError) {
+        console.error('[LOGIN] Error in loading callback:', callbackError);
+      }
     }
   };
 }
